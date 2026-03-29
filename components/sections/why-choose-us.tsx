@@ -1,117 +1,73 @@
-// 'use client';
-
-// import { Award, TrendingUp, Users, Zap } from 'lucide-react';
-
-// const reasons = [
-//   {
-//     icon: Award,
-//     title: 'Clinical Excellence',
-//     description: 'Evidence-based treatments with proven efficacy and safety profiles across multiple clinical trials.',
-//   },
-//   {
-//     icon: TrendingUp,
-//     title: 'Continuous Innovation',
-//     description: 'Ongoing research and development ensuring we stay at the forefront of pharmaceutical advancement.',
-//   },
-//   {
-//     icon: Users,
-//     title: 'Patient-Centric Approach',
-//     description: 'Every decision is guided by our commitment to improving patient outcomes and quality of life.',
-//   },
-//   {
-//     icon: Zap,
-//     title: 'Global Reach',
-//     description: 'Serving healthcare providers and patients across 50+ countries with consistent quality and support.',
-//   },
-// ];
-
-// export function WhyChooseUs() {
-//   return (
-//     <section
-//       id="why-choose"
-//       className="py-20 bg-muted/50 border-t border-border"
-//     >
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-//         <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-//           <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
-//             Why Choose Newlus Pharma?
-//           </h2>
-//           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-//             Our commitment to excellence and innovation sets us apart in the pharmaceutical industry.
-//           </p>
-//         </div>
-
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-//           {reasons.map((reason, index) => {
-//             const Icon = reason.icon;
-//             return (
-//               <div
-//                 key={index}
-//                 className="bg-background rounded-xl p-6 border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-1000"
-//                 style={{ animationDelay: `${(index + 1) * 100}ms` }}
-//               >
-//                 <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 group-hover:bg-primary/20 mb-4">
-//                   <Icon className="w-7 h-7 text-primary" />
-//                 </div>
-//                 <h3 className="text-lg font-bold text-foreground mb-2">
-//                   {reason.title}
-//                 </h3>
-//                 <p className="text-foreground/70 text-sm leading-relaxed">
-//                   {reason.description}
-//                 </p>
-//               </div>
-//             );
-//           })}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
-
 'use client';
 
 import Image from 'next/image';
-import { ShieldCheck, PackageCheck, Globe2, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ShieldCheck, PackageCheck, Globe2, TrendingUp, ArrowUpRight } from 'lucide-react';
 
 const reasons = [
   {
     icon: ShieldCheck,
     title: 'WHO-GMP Certified Quality',
     description: 'We partner exclusively with top-tier, certified manufacturing facilities to guarantee every product meets uncompromising global safety standards.',
-    image: '/why-1.jpg', // Placeholder: Add a clean manufacturing or lab image
+    image: '/why-1.jpg', 
   },
   {
     icon: PackageCheck,
     title: 'Unbroken Supply Chain',
     description: 'Our robust logistics network ensures temperature-controlled, timely, and secure delivery of pharmaceuticals from factory to healthcare providers.',
-    image: '/why-2.jpg', // Placeholder: Add a modern logistics/warehouse image
+    image: '/why-2.jpg', 
   },
   {
     icon: Globe2,
     title: 'Strict Regulatory Compliance',
     description: 'Expert regulatory teams manage comprehensive compliance, ensuring seamless distribution across diverse international markets.',
-    image: '/why-3.jpg', // Placeholder: Add an image of professionals reviewing data or a global map
+    image: '/why-3.jpg', 
   },
   {
     icon: TrendingUp,
     title: 'Strategic Brand Growth',
     description: 'Beyond distribution, we provide data-driven marketing strategies to establish market dominance and build long-term brand trust.',
-    image: '/why-4.jpg', // Placeholder: Add an image of a professional meeting or a doctor consulting
+    image: '/why-4.jpg', 
   },
 ];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } 
+  },
+};
 
 export function WhyChooseUs() {
   return (
     <section
       id="why-choose"
-      className="py-24 lg:py-32 bg-[#F8FAFC] border-t border-gray-100"
+      className="py-24 lg:py-32 bg-[#F8FAFC] border-t border-gray-100 relative overflow-hidden"
     >
-      <div className="max-w-[1536px] mx-auto px-6 md:px-12 xl:px-24">
+      {/* Decorative background element */}
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#0A5C36]/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-[1536px] mx-auto px-6 md:px-12 xl:px-24 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center mb-16 lg:mb-20 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8DC63F]/10 border border-[#8DC63F]/20 w-fit mx-auto mb-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16 lg:mb-24"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8DC63F]/10 border border-[#8DC63F]/20 w-fit mx-auto mb-6 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-[#8DC63F] animate-pulse"></span>
             <span className="text-sm font-bold text-[#0A5C36] uppercase tracking-wider">The Newlus Advantage</span>
           </div>
@@ -123,53 +79,77 @@ export function WhyChooseUs() {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             We are more than a distributor. We are your strategic partner in delivering high-quality healthcare solutions with reliability and global expertise.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Image-Rich Grid Layout - FIXED: Now 4 columns on large screens */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
+        {/* Image-Rich Grid Layout */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
           {reasons.map((reason, index) => {
             const Icon = reason.icon;
             return (
-              <div
+              <motion.div
                 key={index}
-                className="group bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(10,92,54,0.08)] transition-all duration-500 overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-8"
-                style={{ animationDelay: `${(index + 1) * 150}ms` }}
+                variants={cardVariants}
+                whileHover={{ y: -12 }}
+                whileTap={{ scale: 0.98 }}
+                className="group bg-white rounded-[2.5rem] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(10,92,54,0.15)] transition-all duration-500 overflow-hidden flex flex-col h-full"
               >
-                {/* Top Image Section - Adjusted height for elegant proportions */}
-                <div className="relative w-full h-48 sm:h-56 lg:h-48 xl:h-56 overflow-hidden">
-                  <Image
-                    src={reason.image}
-                    alt={reason.title}
-                    fill
-                    className="object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
-                  />
-                  {/* Subtle Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1B365D]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Top Image Section */}
+                <div className="relative w-full h-56 sm:h-64 lg:h-52 xl:h-64 overflow-hidden">
+                  <motion.div
+                    whileHover={{ scale: 1.15 }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    className="w-full h-full"
+                  >
+                    <Image
+                      src={reason.image}
+                      alt={reason.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </motion.div>
                   
-                  {/* Floating Icon overlapping the image */}
-                  <div className="absolute -bottom-5 left-6 bg-white p-2 rounded-xl shadow-lg z-10 transition-transform duration-500 group-hover:-translate-y-1">
-                    <div className="w-10 h-10 bg-[#0A5C36]/10 rounded-lg flex items-center justify-center group-hover:bg-[#0A5C36] transition-colors duration-500">
-                      <Icon className="w-5 h-5 text-[#0A5C36] group-hover:text-white transition-colors duration-500" />
+                  {/* Color Overlay on Hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0A5C36]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {/* Floating Icon with Spring Animation */}
+                  <motion.div 
+                    initial={{ y: 20 }}
+                    whileInView={{ y: 0 }}
+                    className="absolute -bottom-6 left-8 bg-white p-2.5 rounded-2xl shadow-xl z-20"
+                  >
+                    <div className="w-12 h-12 bg-[#0A5C36]/5 rounded-xl flex items-center justify-center group-hover:bg-[#0A5C36] transition-all duration-500 group-hover:rotate-[360deg]">
+                      <Icon className="w-6 h-6 text-[#0A5C36] group-hover:text-white transition-colors duration-500" />
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
 
-                {/* Bottom Text Content - Adjusted padding and text sizes */}
-                <div className="p-6 pt-8 xl:p-8 xl:pt-10 flex flex-col flex-grow relative">
-                  <h3 className="text-xl font-bold text-[#1B365D] mb-3 group-hover:text-[#0A5C36] transition-colors">
+                {/* Bottom Text Content */}
+                <div className="p-8 pt-12 flex flex-col flex-grow relative">
+                  <h3 className="text-xl font-extrabold text-[#1B365D] mb-4 group-hover:text-[#0A5C36] transition-colors leading-tight">
                     {reason.title}
                   </h3>
-                  <p className="text-gray-500 leading-relaxed text-sm">
+                  <p className="text-gray-500 leading-relaxed text-sm mb-6 flex-grow">
                     {reason.description}
                   </p>
                   
-                  {/* Decorative line that grows on hover */}
-                  <div className="absolute bottom-0 left-0 h-1.5 bg-[#8DC63F] w-0 group-hover:w-full transition-all duration-500 ease-out" />
+                  {/* Subtle Interaction Hint */}
+                  {/* <div className="flex items-center gap-2 text-[#0A5C36] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+                    Learn Strategy <ArrowUpRight className="w-4 h-4" />
+                  </div> */}
+
+                  {/* Animated Corner Background (only visible on hover) */}
+                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-[#8DC63F]/5 rounded-tl-[100px] translate-y-12 translate-x-12 group-hover:translate-y-0 group-hover:translate-x-0 transition-transform duration-700" />
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
       </div>
     </section>
