@@ -301,7 +301,7 @@ export function Navbar() {
                 <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: navItems.length * 0.1 }}>
                   <button 
                     onClick={() => { setIsOpen(false); setIsCareersOpen(true); }}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-base font-bold text-[#1B365D] bg-[#8DC63F]/10 hover:bg-[#8DC63F]/20 rounded-xl transition-colors"
+                    className="flex w-full items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-[#0A5C36] rounded-xl transition-colors"
                   >
                     <BriefcaseBusiness className="w-5 h-5 text-[#8DC63F]" />
                     Careers at Newlus
