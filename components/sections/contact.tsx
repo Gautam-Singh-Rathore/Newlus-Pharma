@@ -449,7 +449,7 @@ export function Contact() {
                   { 
                     icon: Building2, 
                     title: "Corporate Office", 
-                    content: "Floor -II, B-05, Kesar, HBU(Main)\nRegional College Ajmer, Rajasthan\nGST No: 08AALCN3358E1ZB" 
+                    content: "Floor -II, B-05, Kesar, HBU(Main)\nRegional College Ajmer, Rajasthan\n" 
                   },
                   { 
                     icon: Mail, 
