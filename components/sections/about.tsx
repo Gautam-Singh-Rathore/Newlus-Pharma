@@ -366,9 +366,9 @@ export function About() {
         {/* Stats Grid - Interactive for Mobile */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
           {[
-            { icon: ShieldCheck, end: 50, label: "WHO-GMP Certified Partners" },
-            { icon: Package, end: 250, label: "Products in Portfolio" },
-            { icon: Globe2, end: 15, label: "Healthcare Providers Reached", suffix: "k+" }
+            { icon: ShieldCheck, end: 10, label: "WHO-GMP Certified Partners" },
+            { icon: Package, end: 50, label: "Products in Portfolio" },
+            { icon: Globe2, end: 1, label: "Healthcare Providers Reached", suffix: "k+" }
           ].map((stat, i) => (
             <motion.div
               key={i}

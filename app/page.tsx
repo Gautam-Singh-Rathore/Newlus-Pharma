@@ -8,6 +8,7 @@ import { WhyChooseUs } from '@/components/sections/why-choose-us';
 import { Testimonials } from '@/components/sections/testimonials';
 import { CTA } from '@/components/sections/cta';
 import { Contact } from '@/components/sections/contact';
+import { Gallery } from '@/components/sections/gallery';
 
 export default function Home() {
   return (
@@ -18,7 +19,8 @@ export default function Home() {
       <Services />
       <Products />
       <WhyChooseUs />
-      <Testimonials />
+      {/* <Testimonials /> */}
+      <Gallery/>
       {/* <CTA /> */}
       <Contact />
       <Footer />
