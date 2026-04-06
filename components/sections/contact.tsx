@@ -1,5 +1,3 @@
-
-
 // 'use client';
 
 // import { useState } from 'react';
@@ -137,9 +135,21 @@
 
 //               <div className="space-y-6 sm:space-y-8">
 //                 {[
-//                   { icon: Building2, title: "Corporate Office", content: "123 Innovation Drive, Suite 400\nSan Francisco, CA 94105" },
-//                   { icon: Mail, title: "Email Us", content: "partnerships@newluspharma.com\ninfo@newluspharma.com" },
-//                   { icon: Phone, title: "Call Us", content: "+1 (555) 123-4567\n+1 (555) 987-6543" }
+//                   { 
+//                     icon: Building2, 
+//                     title: "Corporate Office", 
+//                     content: "Floor -II, B-05, Kesar, HBU(Main)\nRegional College Ajmer, Rajasthan\n" 
+//                   },
+//                   { 
+//                     icon: Mail, 
+//                     title: "Email Us", 
+//                     content: "contact@newluspharma.com" 
+//                   },
+//                   { 
+//                     icon: Phone, 
+//                     title: "Call Us", 
+//                     content: "+91 92141 28213\n+91 89529 13119" 
+//                   }
 //                 ].map((item, idx) => (
 //                   <motion.div 
 //                     key={idx} 
@@ -169,7 +179,7 @@
 //               className="relative z-10 mt-12 pt-8 border-t border-white/10 flex items-center gap-3"
 //             >
 //               <Clock className="w-5 h-5 text-[#8DC63F]" />
-//               <p className="text-xs sm:text-sm text-white/70">Mon - Fri, 9:00 AM - 6:00 PM (EST)</p>
+//               <p className="text-xs sm:text-sm text-white/70">Mon - Fri, 9:00 AM - 6:00 PM (IST)</p>
 //             </motion.div>
 //           </div>
 
@@ -313,7 +323,8 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Phone, Building2, Clock, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, Building2, Clock, Send, CheckCircle2, XCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser'; // Added EmailJS import
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -335,16 +346,37 @@ export function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Replace these with your actual EmailJS Service ID, Template ID, and Public Key
+      const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_k6nil6d';
+      const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_vcczgnm';
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'GSKtSqu_MtsosiYND';
+
+      // The object keys here should match the variables you set up in your EmailJS template (e.g., {{name}}, {{email}})
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        subject: formData.subject,
+        message: formData.message,
+      };
+
+      await emailjs.send(serviceID, templateID, templateParams, publicKey);
+
+      // On Success
       setSubmitStatus('success');
       setFormData({ name: '', email: '', company: '', subject: '', message: '' });
+      
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setSubmitStatus('error'); // Triggers the error message UI
+    } finally {
       setIsSubmitting(false);
-
-      // Reset status after 5 seconds
+      // Reset status message after 5 seconds
       setTimeout(() => setSubmitStatus('idle'), 5000);
-    }, 1500);
+    }
   };
 
   // Animation Variants
@@ -459,7 +491,7 @@ export function Contact() {
                   { 
                     icon: Phone, 
                     title: "Call Us", 
-                    content: "+91 89529 13119\n+91 92141 28213" 
+                    content: "+91 92141 28213\n+91 89529 13119" 
                   }
                 ].map((item, idx) => (
                   <motion.div 
@@ -490,7 +522,7 @@ export function Contact() {
               className="relative z-10 mt-12 pt-8 border-t border-white/10 flex items-center gap-3"
             >
               <Clock className="w-5 h-5 text-[#8DC63F]" />
-              <p className="text-xs sm:text-sm text-white/70">Mon - Fri, 9:00 AM - 6:00 PM (IST)</p>
+              <p className="text-xs sm:text-sm text-white/70">Mon - Sat, 9:00 AM - 6:00 PM (IST)</p>
             </motion.div>
           </div>
 
@@ -588,6 +620,7 @@ export function Contact() {
               </motion.div>
 
               <AnimatePresence mode="wait">
+                {/* SUCCESS MESSAGE */}
                 {submitStatus === 'success' && (
                   <motion.div 
                     initial={{ opacity: 0, height: 0 }}
@@ -597,6 +630,19 @@ export function Contact() {
                   >
                     <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
                     Thank you! Your inquiry has been received. Our team will contact you shortly.
+                  </motion.div>
+                )}
+
+                {/* ERROR MESSAGE */}
+                {submitStatus === 'error' && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 font-semibold flex items-center gap-3"
+                  >
+                    <XCircle className="w-5 h-5 flex-shrink-0" />
+                    Failed to send inquiry. Please try again or email us directly.
                   </motion.div>
                 )}
               </AnimatePresence>
