@@ -594,6 +594,7 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const roles = {
     Marketing: [
@@ -626,29 +627,17 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setErrorMessage('');
     
     try {
-      // 1. Create a native FormData object
-      const submissionData = new FormData();
+      // 1. Automatically grab all inputs that have a "name" attribute
+      const submissionData = new FormData(e.currentTarget);
       
-      // 2. Add your provided Web3Forms Access Key
+      // 2. Append the required Web3Forms configuration
       submissionData.append("access_key", "649db093-d20f-4a98-9844-da1ce576c0b3");
-      
-      // 3. Add a custom subject line so it's easy to read in your inbox
       submissionData.append("subject", `New Job Application: ${formData.name} - ${formData.role}`);
-      
-      // 4. Append all form fields
-      submissionData.append("Name", formData.name);
-      submissionData.append("Email", formData.email);
-      submissionData.append("Department", formData.category);
-      submissionData.append("Role", formData.role);
-      
-      // 5. Append the raw file (Web3Forms automatically attaches it to the email)
-      if (file) {
-        submissionData.append("Resume_Attachment", file);
-      }
 
-      // 6. Send the POST request to Web3Forms
+      // 3. Send to Web3Forms
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: submissionData
@@ -656,13 +645,12 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
 
       const result = await response.json();
 
-      if (result.success) {
+      if (response.ok && result.success) {
         setSubmitStatus('success');
         
-        // Auto close after 3 seconds on success
+        // Auto close after success
         setTimeout(() => {
           onClose();
-          // Reset form quietly after the modal closes
           setTimeout(() => {
             setSubmitStatus('idle');
             setFormData({ name: '', email: '', category: '', role: '' });
@@ -670,11 +658,13 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
           }, 500);
         }, 3000);
       } else {
-        throw new Error(result.message || "Submission failed");
+        // If Web3Forms returns an error, catch it
+        throw new Error(result.message || "Failed to submit application");
       }
 
-    } catch (error) {
-      console.error('Failed to submit application:', error);
+    } catch (error: any) {
+      console.error('Submission Error:', error);
+      setErrorMessage(error.message || "Please check your internet connection and try again.");
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -687,9 +677,7 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
         <>
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
             className="fixed inset-0 bg-[#1B365D]/60 backdrop-blur-sm z-[100]"
           />
@@ -697,9 +685,7 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
           {/* Modal Container */}
           <div className="fixed inset-0 flex items-center justify-center z-[101] px-4 py-6 pointer-events-none">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="bg-white w-full max-w-2xl rounded-3xl lg:rounded-[2rem] shadow-2xl overflow-hidden pointer-events-auto flex flex-col max-h-[90vh]"
             >
@@ -743,8 +729,9 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-bold text-[#1B365D] mb-2">Full Name *</label>
+                        {/* ADDED name="name" */}
                         <input
-                          type="text" required
+                          type="text" name="name" required
                           value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
                           className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-[#8DC63F]/50 focus:border-[#8DC63F] outline-none transition-all focus:bg-white"
@@ -753,8 +740,9 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
                       </div>
                       <div>
                         <label className="block text-sm font-bold text-[#1B365D] mb-2">Email Address *</label>
+                        {/* ADDED name="email" */}
                         <input
-                          type="email" required
+                          type="email" name="email" required
                           value={formData.email}
                           onChange={(e) => setFormData({...formData, email: e.target.value})}
                           className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-[#8DC63F]/50 focus:border-[#8DC63F] outline-none transition-all focus:bg-white"
@@ -767,8 +755,9 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
                       <div>
                         <label className="block text-sm font-bold text-[#1B365D] mb-2">Department *</label>
                         <div className="relative">
+                          {/* ADDED name="Department" */}
                           <select
-                            required
+                            name="Department" required
                             value={formData.category}
                             onChange={(e) => setFormData({...formData, category: e.target.value, role: ''})}
                             className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-[#8DC63F]/50 focus:border-[#8DC63F] outline-none transition-all appearance-none cursor-pointer"
@@ -790,8 +779,9 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
                           >
                             <label className="block text-sm font-bold text-[#1B365D] mb-2">Specific Role *</label>
                             <div className="relative">
+                              {/* ADDED name="Role" */}
                               <select
-                                required
+                                name="Role" required
                                 value={formData.role}
                                 onChange={(e) => setFormData({...formData, role: e.target.value})}
                                 className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-[#8DC63F]/50 focus:border-[#8DC63F] outline-none transition-all appearance-none cursor-pointer"
@@ -814,8 +804,9 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
                     <div>
                       <label className="block text-sm font-bold text-[#1B365D] mb-2">Upload Resume / CV *</label>
                       <div className="relative border-2 border-dashed border-gray-300 rounded-2xl p-8 hover:border-[#8DC63F] hover:bg-[#8DC63F]/5 transition-all group bg-white">
+                        {/* ADDED name="attachment" so Web3Forms captures it */}
                         <input
-                          type="file" required accept=".pdf,.doc,.docx"
+                          type="file" name="attachment" required accept=".pdf,.doc,.docx"
                           onChange={handleFileChange}
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         />
@@ -844,10 +835,13 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
                     {submitStatus === 'error' && (
                       <motion.div 
                         initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
-                        className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm font-semibold flex items-center gap-3"
+                        className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm font-semibold flex items-start gap-3"
                       >
-                        <XCircle className="w-5 h-5 flex-shrink-0" />
-                        Upload failed. Please check your internet connection and try again.
+                        <XCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-bold">Upload failed</p>
+                          <p>{errorMessage}</p>
+                        </div>
                       </motion.div>
                     )}
 
