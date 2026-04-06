@@ -168,45 +168,38 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Pill, Bone, Stethoscope, ChevronRight } from 'lucide-react';
 
 const products = [
-  {
-    category: 'Gynecology',
-    icon: Pill,
-    items: [
-      {
-        name: 'FemCare Plus',
-        description: 'Comprehensive nutritional support for maternal health and fetal development.',
-        features: ['High-absorption Iron & Folic Acid', 'Essential vitamins for pregnancy', 'Gentle on the stomach'],
-      },
-      {
-        name: 'OvaBalance',
-        description: 'Hormonal support and PCOS management solution.',
-        features: ['Myo-Inositol based formula', 'Regulates menstrual cycles', 'Supports reproductive health'],
-      },
-      {
-        name: 'Calcium D3 Max',
-        description: 'Bone density support tailored for post-menopausal women.',
-        features: ['Premium Calcium Citrate', 'Enhanced with Vitamin D3 & K2', 'Reduces fracture risk'],
-      },
-    ],
-  },
+  
   {
     category: 'Orthopedics',
     icon: Bone,
     items: [
       {
-        name: 'JointFlex Pro',
-        description: 'Advanced cartilage repair and osteoarthritis management.',
-        features: ['Glucosamine & Chondroitin complex', 'Reduces joint stiffness', 'Improves mobility'],
+        name: 'Cramplus',
+        description: 'Balanced nutritional supplement enriched with magnesium, calcium, and essential vitamins, designed to support muscle relaxation.',
+        features: [
+          'Relieves muscle cramps and spasms',
+          'Supports muscle relaxation and nerve function',
+          'Helps reduce menstrual and pregnancy-related discomfort',
+          'Improves overall strength and reduces fatigue'
+        ],
       },
       {
-        name: 'OsteoHeal',
-        description: 'Accelerated bone healing and fracture recovery supplement.',
-        features: ['Cissus Quadrangularis extract', 'Promotes osteoblast activity', 'Reduces recovery time'],
+        name: 'Triolus-D',
+        description: 'Nutritional supplement formulated with Vitamin D3 and supportive nutrients to promote bone strength and musculoskeletal health.',
+        features: [
+          'Enhances calcium absorption',
+          'Supports strong bones and teeth',
+          'Improves muscle strength and reduces weakness'
+        ],
       },
       {
-        name: 'NerveCalm',
-        description: 'Targeted relief for neuropathic pain and sciatica.',
-        features: ['Pregabalin & Methylcobalamin', 'Reduces nerve inflammation', 'Fast-acting relief'],
+        name: 'Cilolus 50',
+        description: 'Prescription tablet used to treat intermittent claudication and poor circulation (peripheral artery disease).',
+        features: [
+          'Treats intermittent claudication',
+          'Reduces leg pain and muscle cramps when walking',
+          'Improves peripheral blood circulation'
+        ],
       },
     ],
   },
@@ -215,19 +208,74 @@ const products = [
     icon: Stethoscope,
     items: [
       {
-        name: 'GastroSoothe',
-        description: 'Rapid relief for hyperacidity, GERD, and gastric ulcers.',
-        features: ['Proton Pump Inhibitor (PPI)', 'Extended 24-hour relief', 'Heals esophageal lining'],
+        name: 'Ferolus',
+        description: 'An iron-rich nutritional supplement combined with folic acid and essential vitamins to help manage Iron Deficiency Anemia.',
+        features: [
+          'Helps increase hemoglobin levels',
+          'Supports red blood cell formation',
+          'Reduces fatigue and weakness',
+          'Useful in pregnancy and nutritional deficiencies'
+        ],
       },
       {
-        name: 'RespiClear',
-        description: 'Effective management for respiratory tract infections and bronchitis.',
-        features: ['Broad-spectrum antibiotic', 'Reduces mucosal inflammation', 'Fast symptomatic relief'],
+        name: 'Metlus',
+        description: 'An oral anti-diabetic medication widely used to manage Type 2 Diabetes and improve insulin sensitivity.',
+        features: [
+          'Helps control blood sugar levels',
+          'Improves insulin sensitivity',
+          'Reduces glucose production in the liver',
+          'Useful in managing PCOS-related insulin resistance'
+        ],
       },
       {
-        name: 'VitoDaily',
-        description: 'Complete daily multivitamin and antioxidant complex for general wellness.',
-        features: ['Essential B-Complex', 'Boosts natural immunity', 'Combats daily fatigue'],
+        name: 'Triolus-D',
+        description: 'Nutritional supplement formulated with Vitamin D3 and supportive nutrients to promote bone strength and musculoskeletal health.',
+        features: [
+          'Enhances calcium absorption',
+          'Supports strong bones and teeth',
+          'Helps manage Vitamin D Deficiency'
+        ],
+      },
+      {
+        name: 'Cilolus 50',
+        description: 'Prescription tablet used to treat intermittent claudication and poor circulation (peripheral artery disease).',
+        features: [
+          'Treats intermittent claudication',
+          'Reduces leg pain and muscle cramps when walking',
+          'Improves peripheral blood circulation'
+        ],
+      },
+    ],
+  },
+  {
+    category: 'Gynecology',
+    icon: Pill,
+    items: [
+      {
+        name: 'Myolus',
+        description: 'Comprehensive nutraceutical formulation commonly prescribed to support female reproductive health.',
+        features: [
+          'Regulates menstrual cycle',
+          'Improves insulin sensitivity',
+          'Supports ovulation and fertility',
+          'Enhances hormonal balance'
+        ],
+      },
+    ],
+  },
+  
+  {
+    category: 'Cardiology',
+    icon: Stethoscope,
+    items: [
+      {
+        name: 'Cilolus 50',
+        description: 'Prescription tablet used to treat intermittent claudication and poor circulation (peripheral artery disease).',
+        features: [
+          'Treats intermittent claudication',
+          'Reduces leg pain and muscle cramps when walking',
+          'Improves peripheral blood circulation'
+        ],
       },
     ],
   },

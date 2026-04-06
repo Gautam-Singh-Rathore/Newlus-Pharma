@@ -627,18 +627,21 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
-    setErrorMessage('');
     
     try {
-      // 1. Automatically grab all inputs that have a "name" attribute
-      const submissionData = new FormData(e.currentTarget);
+      const submissionData = new FormData();
       
-      // 2. Append the required Web3Forms configuration
-      submissionData.append("access_key", "649db093-d20f-4a98-9844-da1ce576c0b3");
-      submissionData.append("subject", `New Job Application: ${formData.name} - ${formData.role}`);
+      submissionData.append("name", formData.name);
+      submissionData.append("email", formData.email);
+      submissionData.append("category", formData.category);
+      submissionData.append("role", formData.role);
+      
+      if (file) {
+        submissionData.append("attachment", file);
+      }
 
-      // 3. Send to Web3Forms
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // Point this to your new local API route!
+      const response = await fetch("/api/careers", {
         method: "POST",
         body: submissionData
       });
@@ -648,7 +651,6 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
       if (response.ok && result.success) {
         setSubmitStatus('success');
         
-        // Auto close after success
         setTimeout(() => {
           onClose();
           setTimeout(() => {
@@ -658,13 +660,11 @@ export function CareersModal({ isOpen, onClose }: CareersModalProps) {
           }, 500);
         }, 3000);
       } else {
-        // If Web3Forms returns an error, catch it
-        throw new Error(result.message || "Failed to submit application");
+        throw new Error(result.error || "Submission failed");
       }
 
     } catch (error: any) {
-      console.error('Submission Error:', error);
-      setErrorMessage(error.message || "Please check your internet connection and try again.");
+      console.error('Failed to submit application:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
