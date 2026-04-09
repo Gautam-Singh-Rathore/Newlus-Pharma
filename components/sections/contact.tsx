@@ -8,6 +8,7 @@ export function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    mobile: '', // ADDED
     company: '',
     subject: '',
     message: '',
@@ -27,37 +28,32 @@ export function Contact() {
     setSubmitStatus('idle');
 
     try {
-      // Point to our new custom Next.js API route
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        // Send the form data as a JSON string
         body: JSON.stringify(formData),
       });
 
       const result = await response.json();
 
       if (response.ok && result.success) {
-        // On Success
         setSubmitStatus('success');
-        setFormData({ name: '', email: '', company: '', subject: '', message: '' });
+        setFormData({ name: '', email: '', mobile: '', company: '', subject: '', message: '' });
       } else {
         throw new Error(result.error || 'Failed to send inquiry');
       }
       
     } catch (error) {
       console.error('Contact Form Error:', error);
-      setSubmitStatus('error'); // Triggers the error message UI
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
-      // Reset status message after 5 seconds
       setTimeout(() => setSubmitStatus('idle'), 5000);
     }
   };
 
-  // Animation Variants
   const containerVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { 
@@ -130,7 +126,6 @@ export function Contact() {
           {/* LEFT SIDE: Contact Information Panel */}
           <div className="lg:w-2/5 bg-[#1B365D] p-8 sm:p-10 lg:p-14 relative overflow-hidden flex flex-col justify-between text-white">
             
-            {/* Custom Background Decor */}
             <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
             <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-[#8DC63F] opacity-30 rounded-full blur-[80px] pointer-events-none"></div>
 
@@ -244,6 +239,7 @@ export function Contact() {
                 </motion.div>
               </div>
 
+              {/* ADDED ROW FOR EMAIL AND MOBILE */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <motion.div variants={itemVariants}>
                   <label htmlFor="email" className="block text-xs sm:text-sm font-bold text-[#1B365D] mb-2">Work Email *</label>
@@ -260,28 +256,43 @@ export function Contact() {
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                  <label htmlFor="subject" className="block text-xs sm:text-sm font-bold text-[#1B365D] mb-2">Inquiry Type *</label>
-                  <div className="relative">
-                    <select
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-800 focus:ring-2 focus:ring-[#8DC63F]/50 focus:border-[#8DC63F] outline-none transition-all focus:bg-white appearance-none cursor-pointer text-sm sm:text-base"
-                    >
-                      <option value="" disabled>Select a topic</option>
-                      <option value="Distribution">Distribution Partnership</option>
-                      <option value="WhiteLabel">White-Labeling Services</option>
-                      <option value="Product">Product Inquiry</option>
-                      <option value="Other">Other Business Inquiry</option>
-                    </select>
-                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                  </div>
+                  <label htmlFor="mobile" className="block text-xs sm:text-sm font-bold text-[#1B365D] mb-2">Mobile Number *</label>
+                  <input
+                    type="tel"
+                    id="mobile"
+                    name="mobile"
+                    value={formData.mobile}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-800 focus:ring-2 focus:ring-[#8DC63F]/50 focus:border-[#8DC63F] outline-none transition-all focus:bg-white text-sm sm:text-base"
+                    placeholder="+91 98765 43210"
+                  />
                 </motion.div>
               </div>
+
+              {/* INQUIRY TYPE NOW FULL WIDTH */}
+              <motion.div variants={itemVariants}>
+                <label htmlFor="subject" className="block text-xs sm:text-sm font-bold text-[#1B365D] mb-2">Inquiry Type *</label>
+                <div className="relative">
+                  <select
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-5 py-3.5 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-800 focus:ring-2 focus:ring-[#8DC63F]/50 focus:border-[#8DC63F] outline-none transition-all focus:bg-white appearance-none cursor-pointer text-sm sm:text-base"
+                  >
+                    <option value="" disabled>Select a topic</option>
+                    <option value="Distribution">Distribution Partnership</option>
+                    <option value="WhiteLabel">White-Labeling Services</option>
+                    <option value="Product">Product Inquiry</option>
+                    <option value="Other">Other Business Inquiry</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </div>
+              </motion.div>
 
               <motion.div variants={itemVariants}>
                 <label htmlFor="message" className="block text-xs sm:text-sm font-bold text-[#1B365D] mb-2">Message *</label>
@@ -298,7 +309,6 @@ export function Contact() {
               </motion.div>
 
               <AnimatePresence mode="wait">
-                {/* SUCCESS MESSAGE */}
                 {submitStatus === 'success' && (
                   <motion.div 
                     initial={{ opacity: 0, height: 0 }}
@@ -311,7 +321,6 @@ export function Contact() {
                   </motion.div>
                 )}
 
-                {/* ERROR MESSAGE */}
                 {submitStatus === 'error' && (
                   <motion.div 
                     initial={{ opacity: 0, height: 0 }}

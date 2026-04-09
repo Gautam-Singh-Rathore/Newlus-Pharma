@@ -3,7 +3,6 @@
 
 // export async function POST(request: Request) {
 //   try {
-//     // 1. Extract the form data sent from CareersModal
 //     const formData = await request.formData();
 //     const name = formData.get('name') as string;
 //     const email = formData.get('email') as string;
@@ -15,24 +14,22 @@
 //       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
 //     }
 
-//     // 2. Convert the uploaded PDF/Doc into a Node.js Buffer
 //     const arrayBuffer = await file.arrayBuffer();
 //     const buffer = Buffer.from(arrayBuffer);
 
-//     // 3. Hardcoded Nodemailer Transporter for Gmail
+//     // Hostinger SMTP Configuration
 //     const transporter = nodemailer.createTransport({
-//       host: 'smtp.gmail.com',
+//       host: 'smtp.hostinger.com',
 //       port: 465,
 //       secure: true,
 //       auth: {
-//         user: 'newluspharma@gmail.com',
-//         pass: 'cfpk reod totu eqwx',
+//         user: 'contact@newluspharma.com',
+//         pass: 'Newlus@1234',
 //       },
 //     });
 
-//     // 4. Email 1: Internal Notification (Sent to HR/Contact Inbox)
 //     const internalMailOptions = {
-//       from: 'newluspharma@gmail.com',
+//       from: 'contact@newluspharma.com',
 //       to: 'contact@newluspharma.com',
 //       replyTo: email,
 //       subject: `New Job Application: ${name} - ${role}`,
@@ -57,9 +54,8 @@
 //       ],
 //     };
 
-//     // 5. Email 2: Auto-Reply to the Applicant
 //     const autoReplyOptions = {
-//       from: '"Newlus Pharma Careers" <newluspharma@gmail.com>',
+//       from: '"Newlus Pharma Careers" <contact@newluspharma.com>',
 //       to: email,
 //       subject: `Application Received: ${role} at Newlus Pharma`,
 //       html: `
@@ -75,7 +71,6 @@
 //       `,
 //     };
 
-//     // 6. Send both emails simultaneously
 //     await Promise.all([
 //       transporter.sendMail(internalMailOptions),
 //       transporter.sendMail(autoReplyOptions)
@@ -89,7 +84,6 @@
 //   }
 // }
 
-
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
@@ -98,11 +92,13 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
+    const mobile = formData.get('mobile') as string; // EXTRACT MOBILE
     const department = formData.get('category') as string;
     const role = formData.get('role') as string;
     const file = formData.get('attachment') as File | null;
 
-    if (!name || !email || !department || !role || !file) {
+    // Added mobile to validation
+    if (!name || !email || !mobile || !department || !role || !file) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -132,6 +128,7 @@ Applicant Details:
 ------------------
 Name: ${name}
 Email: ${email}
+Mobile Number: ${mobile} 
 Department: ${department}
 Role Applied For: ${role}
 
